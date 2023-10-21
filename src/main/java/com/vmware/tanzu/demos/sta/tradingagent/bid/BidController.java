@@ -1,6 +1,7 @@
 package com.vmware.tanzu.demos.sta.tradingagent.bid;
 
 
+import kotlin.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -105,6 +106,8 @@ class BidController {
                 stockValues.put(s.symbol(), s.price());
             }
 
+            trade(userInfo,stocks);
+            /*
             var totalBids = BigDecimal.ZERO;
             for (final BidAgentRequest agentReq : requests) {
                 logger.info("Placing bid: {}", agentReq);
@@ -116,9 +119,62 @@ class BidController {
                 if (stockValue != null) {
                     totalBids = totalBids.add(stockValue.multiply(BigDecimal.valueOf(agentReq.shares())));
                 }
-            }
-            out.println("Total bids: " + nf.format(totalBids));
+            }*/
+            //out.println("Total bids: " + nf.format(totalBids));
         }
+    }
+
+    private static final BigDecimal BUY_GOOGLE_THRESHOLD = new BigDecimal(131);
+    private static final BigDecimal SELL_GOOGLE_THRESHOLD = new BigDecimal(140);
+
+    private static final BigDecimal BUY_APPLE_THRESHOLD = new BigDecimal(130);
+    private static final BigDecimal SELL_APPLE_THRESHOLD = new BigDecimal(140);
+
+    private static final BigDecimal BUY_AMAZON_THRESHOLD = new BigDecimal(130);
+    private static final BigDecimal SELL_AMAZON_THRESHOLD = new BigDecimal(140);
+
+    private static final BigDecimal BUY_META_THRESHOLD = new BigDecimal(130);
+    private static final BigDecimal SELL_META_THRESHOLD = new BigDecimal(140);
+
+    private static final BigDecimal BUY_MICROSOFT_THRESHOLD = new BigDecimal(130);
+    private static final BigDecimal SELL_MICROSOFT_THRESHOLD = new BigDecimal(140);
+
+    private static final BigDecimal BUY_VMWARE_THRESHOLD = new BigDecimal(130);
+    private static final BigDecimal SELL_VMWARE_THRESHOLD = new BigDecimal(140);
+
+   /* Map<String, com.nimbusds.jose.util.Pair> stockPricesMap = new HashMap<>()
+    static{
+        stockPricesMap.put("GOOGL", Pair.)
+    }
+*/
+
+    public void trade(UserInfo userInfo, Stock stocksList[]){
+
+
+        List<UserBidRequest> bidRequestList = new ArrayList<>();
+        UserBidRequest bidRequest = new UserBidRequest(user, "amzn", -500);
+        //UserBidRequest bidRequest2 = new UserBidRequest(user, "googl", -300);
+        client.postForLocation("/api/v1/bids", bidRequest);
+        //client.postForLocation("/api/v1/bids", bidRequest2);
+        for(Stock stock: stocksList){
+           /* if("GOOGL".equalsIgnoreCase(stock.symbol())) {
+                SELL_GOOGLE_THRESHOLD = stock.price();
+                BigDecimal
+                if(SELL_GOOGLE_THRESHOLD.)
+
+            }
+            if("AAPL".equalsIgnoreCase(stock.symbol())) {
+                SELL_APPLE_THRESHOLD_THRESHOLD = stock.price();
+            }
+            if("META".equalsIgnoreCase(stock.symbol())) {
+                SELL_META_THRESHOLD = stock.price();
+            }*/
+          /*  UserBidRequest bidRequest = new UserBidRequest(user, stock.symbol(), -1000);
+            System.out.println("Placing bid: " + stock.symbol()+"\t 1000");
+            client.postForLocation("/api/v1/bids", bidRequest);
+            System.out.println("Placing bid: " + bidRequest);*/
+        }
+
     }
 
     @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -135,18 +191,20 @@ class BidController {
         return buffer.getBuffer();
     }
 
-    private record UserBidRequest(String user, String symbol, int shares) {
+    public record UserBidRequest(String user, String symbol, int shares) {
     }
 
-    private record UserInfo(
+    public record UserInfo(
             BigDecimal balance,
             List<UserShare> stocks
     ) {
     }
 
-    private record UserShare(
+    public record UserShare(
             String symbol,
             int shares
     ) {
     }
+
+
 }

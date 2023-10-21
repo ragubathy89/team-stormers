@@ -8,6 +8,19 @@ app:
 spring:
   application:
     name: team-stormers
+  security:
+    oauth2:
+      client:
+        registration:
+          sso:
+            client-id: sta_stormers
+            client-secret: 5dd67ebd-0130-44ba-894c-16edbbe66f6a
+            authorization-grant-type: client_credentials
+            scope:
+              - bid
+        provider:
+          sso:
+            issuer-uri: https://login.sso.az.run.withtanzu.com
 
 management:
   metrics:
